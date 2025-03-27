@@ -12,18 +12,17 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
-    <jersey.version>3.1.2</jersey.version> <!-- Updated Jersey version -->
+    <jersey.version>3.1.2</jersey.version>
+    <jakarta.ws.rs.version>3.1.0</jakarta.ws.rs.version>
   </properties>
 
   <build>
     <plugins>
-      <!-- Modern compiler plugin -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.11.0</version>
       </plugin>    
       
-      <!-- Updated war plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
@@ -33,7 +32,6 @@
         </configuration>
       </plugin>
       
-      <!-- Modern jetty plugin -->
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
@@ -55,10 +53,17 @@
   </build>
 
   <dependencies>
-    <!-- Updated Jersey dependencies -->
+    <!-- Jakarta JAX-RS API -->
+    <dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <version>${jakarta.ws.rs.version}</version>
+    </dependency>
+
+    <!-- Jersey dependencies -->
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
-      <artifactId>jersey-container-servlet-core</artifactId>
+      <artifactId>jersey-container-servlet</artifactId>
       <version>${jersey.version}</version>
     </dependency>
     <dependency>
@@ -70,6 +75,14 @@
       <groupId>org.glassfish.jersey.inject</groupId>
       <artifactId>jersey-hk2</artifactId>
       <version>${jersey.version}</version>
+    </dependency>
+    
+    <!-- For testing -->
+    <dependency>
+      <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+      <artifactId>jersey-test-framework-provider-jetty</artifactId>
+      <version>${jersey.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 </project>
