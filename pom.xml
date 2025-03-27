@@ -7,25 +7,37 @@
   <artifactId>calculator</artifactId>
   <version>1.0</version>
   <packaging>war</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <jersey.version>3.1.2</jersey.version> <!-- Updated Jersey version -->
+  </properties>
+
   <build>
     <plugins>
+      <!-- Modern compiler plugin -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
+        <version>3.11.0</version>
       </plugin>    
+      
+      <!-- Updated war plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.1.1</version>
+        <version>3.3.2</version>
+        <configuration>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
       </plugin>
+      
+      <!-- Modern jetty plugin -->
       <plugin>
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.2.9.v20150224</version>
+        <version>11.0.15</version>
         <configuration>
           <webApp>
             <contextPath>/</contextPath>
@@ -33,50 +45,31 @@
           <webAppSourceDirectory>target/${project.artifactId}-${project.version}</webAppSourceDirectory>
           <stopPort>8079</stopPort>
           <stopKey>stopit</stopKey>
-          <stopWait>10</stopWait>
           <httpConnector>
-            <!--<port>8080</port>-->
             <idleTimeout>60000</idleTimeout>
           </httpConnector>
+          <scanIntervalSeconds>0</scanIntervalSeconds>
         </configuration>
-        <executions>
-          <execution>
-            <id>start-jetty</id>
-            <phase>pre-integration-test</phase>
-            <goals>
-              <goal>start</goal>
-            </goals>
-            <configuration>
-              <scanIntervalSeconds>0</scanIntervalSeconds>
-              <daemon>true</daemon>
-            </configuration>
-          </execution>
-          <execution>
-            <id>stop-jetty</id>
-            <phase>post-integration-test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
+    <!-- Updated Jersey dependencies -->
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-servlet-core</artifactId>
-      <version>2.22.2</version>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-json-jackson</artifactId>
-      <version>2.22.2</version>
+      <version>${jersey.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>2.22.2</version>
+      <groupId>org.glassfish.jersey.inject</groupId>
+      <artifactId>jersey-hk2</artifactId>
+      <version>${jersey.version}</version>
     </dependency>
   </dependencies>
 </project>
