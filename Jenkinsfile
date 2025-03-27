@@ -21,23 +21,29 @@ node {
     stage('deploy') {
       def resourceGroup = 'jenkins-get-started-rg'
       def webAppName = 'weishenfang'
-      // login Azure
+      
+      // Login to Azure (with quoted password to handle spaces)
       withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
-       sh '''
-          az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID
-          az account set -s $AZURE_SUBSCRIPTION_ID
+        sh '''
+          az login --service-principal \
+            -u "$AZURE_CLIENT_ID" \
+            -p "'$AZURE_CLIENT_SECRET'" \  # <-- Note the extra quotes around the variable
+            -t "$AZURE_TENANT_ID"
+          az account set -s "$AZURE_SUBSCRIPTION_ID"
         '''
       }
-      // get publish settings
+      
+      // Get publish settings
       def pubProfilesJson = sh script: "az webapp deployment list-publishing-profiles -g $resourceGroup -n $webAppName", returnStdout: true
-      def ftpProfile = getFtpPublishProfile pubProfilesJson
-      // upload package
+      def ftpProfile = getFtpPublishProfile(pubProfilesJson)
+      
+      // Upload package via FTP
       sh "curl -T target/calculator-1.0.war $ftpProfile.url/webapps/ROOT.war -u '$ftpProfile.username:$ftpProfile.password'"
-      // log out
+      
+      // Log out
       sh 'az logout'
     }
   }
 }
-
 
 
