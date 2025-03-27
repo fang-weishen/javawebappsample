@@ -35,8 +35,8 @@ node {
       def ftpProfile = getFtpPublishProfile(pubProfilesJson)
       
       // Upload package via FTP
-      sh "curl -T target/calculator-1.0.war $ftpProfile.url/webapps/ROOT.war -u '$ftpProfile.username:$ftpProfile.password'"
-      
+      // sh "curl -T target/calculator-1.0.war $ftpProfile.url/webapps/ROOT.war -u '$ftpProfile.username:$ftpProfile.password'"
+      sh "az webapp deploy --resource-group jenkins-get-started-rg --name weishenfang --src-path target/calculator-1.0.war --type war"
       // Log out
       sh 'az logout'
     }
