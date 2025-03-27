@@ -25,10 +25,7 @@ node {
       // Login to Azure (with quoted password to handle spaces)
       withCredentials([usernamePassword(credentialsId: 'AzureServicePrincipal', passwordVariable: 'AZURE_CLIENT_SECRET', usernameVariable: 'AZURE_CLIENT_ID')]) {
         sh '''
-          az login --service-principal \
-            -u "$AZURE_CLIENT_ID" \
-            -p "'$AZURE_CLIENT_SECRET'" \  # <-- Note the extra quotes around the variable
-            -t "$AZURE_TENANT_ID"
+          az login --service-principal -u "$AZURE_CLIENT_ID" -p "'$AZURE_CLIENT_SECRET'" -t "$AZURE_TENANT_ID"
           az account set -s "$AZURE_SUBSCRIPTION_ID"
         '''
       }
@@ -45,5 +42,4 @@ node {
     }
   }
 }
-
 
